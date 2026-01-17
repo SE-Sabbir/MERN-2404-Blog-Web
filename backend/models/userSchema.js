@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     email:{type:String , required:true, unique:true},
     password:{type:String , required:true},
     role:{type:String , enum:["user" , "admin"] , default:"user"},
+    isVerified:{type:Boolean , default:false},
     otp:{type:String},
     otpExpiry:{type:Date},
     resetPasswordToken:{type:String},
@@ -24,14 +25,12 @@ userSchema.pre("save", async function () {
     throw new Error("Error hashing password");
     
   }
+});
 
 // 🔑 Compare password during login
-userSchema.methods.comparePassword = async function (enteredPassword) {
+userSchema.methods.verifyPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
-
-});
 
 
 module.exports = mongoose.model("user" , userSchema)
