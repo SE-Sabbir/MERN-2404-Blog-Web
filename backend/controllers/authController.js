@@ -4,6 +4,7 @@ const sendMail = require("../services/mailSender")
 const { verifyOtpTemplate, resetPasswordTemplate } = require("../services/mailTemplate")
 const responseHandler = require("../services/responseHandler")
 const { generateOTP, generateAccessToken, generateRefreshToken, generateResetPasswordToken } = require("../services/utils")
+const crypto = require('crypto');
 
 // ------------------Register Controller----------------------
 const registerUser = async (req , res)=>{
@@ -65,7 +66,13 @@ const loginUser = async(req , res)=>{
         const accessToken = generateAccessToken(user._id, user.email, user.role)
         const refreshToken = generateRefreshToken(user._id, user.email, user.role)
         // ----- if password true then show successfull
-        res.cookie("X-Acc-Tkn", accessToken).cookie("X-Ref-Tkn" , refreshToken)
+        res.cookie("x-acc-tkn", accessToken ,{
+            httpOnly: true,
+            secure: false
+        }).cookie("x-ref-tkn" , refreshToken , {
+            httpOnly: true,
+            secure: false
+        })
         responseHandler.success(res , "Login successfull")
     }
     catch(err){
@@ -95,6 +102,41 @@ const forgatePassword = async (req , res)=>{
         console.log(err)
     }
 }
+// ------------------ForgatePassword Controller----------------------
+const resetPassword =async(req , res)=>{
+    try{
+        const {newPassword} = req.body
+        const {token} = req.params;
+        if(!newPassword) return responseHandler.error(res , "New Password is required" , 400)
+        if(!token) return responseHandler.error(res , "Invalid Request" , 400)
+        const hashToken = crypto.createHash('sha256').update(token).digest('hex');
+
+        const user = await userSchema.findOne({
+            resetPasswordToken:hashToken,resetPasswordExpiry:{$gt:Date.now()}
+        })
+        if(!user) return responseHandler.error(res , "Invalid or expired token", 400)
+        user.password = newPassword;
+        user.resetPasswordToken = null;
+        user.resetPasswordExpiry = null;
+        await user.save();
+        responseHandler.success(res , "Password reset successfully")
+    }
+    catch(err){
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
+// ------------------Get User Profile Controller----------------------
+const getUserProfile = async(req , res)=>{
+    try{
+        const user = await userSchema.findById(req.user._id).select("fullName email role avatar")
+        responseHandler.success(res , "User Profile fetched successfully" , user)
+    }
+    catch(err){
+        responseHandler.error(res, "Internal Server Error")
+    }
+}
 
 
-module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword}
+
+module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile}
