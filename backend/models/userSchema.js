@@ -2,11 +2,13 @@ const mongoose = require('mongoose')
 const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema({
+    avatar:{type:String},
     fullName:{type:String , required:true},
     email:{type:String , required:true, unique:true},
     password:{type:String , required:true},
     role:{type:String , enum:["user" , "admin"] , default:"user"},
     isVerified:{type:Boolean , default:false},
+    tags:{type:String},
     otp:{type:String},
     otpExpiry:{type:Date},
     resetPasswordToken:{type:String},

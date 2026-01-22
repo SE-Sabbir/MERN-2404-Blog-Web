@@ -80,7 +80,7 @@ const loginUser = async(req , res)=>{
         console.log(err)
     }
 }
-// ------------------ForgatePassword Controller----------------------
+// ------------------Forgate Password Controller----------------------
 const forgatePassword = async (req , res)=>{
     try{
         const {email} = req.body
@@ -102,7 +102,7 @@ const forgatePassword = async (req , res)=>{
         console.log(err)
     }
 }
-// ------------------ForgatePassword Controller----------------------
+// ------------------Reset Password Controller----------------------
 const resetPassword =async(req , res)=>{
     try{
         const {newPassword} = req.body
@@ -136,7 +136,20 @@ const getUserProfile = async(req , res)=>{
         responseHandler.error(res, "Internal Server Error")
     }
 }
+// ------------------Update User Profile Controller----------------------
+const updateProfile = async(req , res)=>{
+    try{
+        const {fullName} = req.body
+        console.log(req.file)
+        responseHandler.success(res , "Profile update Successfully")
+    }
+    catch(err){
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
 
 
 
-module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile}
+
+module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile}
