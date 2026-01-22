@@ -1,10 +1,12 @@
 const userSchema = require("../models/userSchema")
 const { emailRegex, passwordRegex } = require("../services/allRegex")
+const { uploadToCloudinary } = require("../services/cloudinaryConfig")
 const sendMail = require("../services/mailSender")
 const { verifyOtpTemplate, resetPasswordTemplate } = require("../services/mailTemplate")
 const responseHandler = require("../services/responseHandler")
 const { generateOTP, generateAccessToken, generateRefreshToken, generateResetPasswordToken } = require("../services/utils")
 const crypto = require('crypto');
+
 
 // ------------------Register Controller----------------------
 const registerUser = async (req , res)=>{
@@ -140,8 +142,16 @@ const getUserProfile = async(req , res)=>{
 const updateProfile = async(req , res)=>{
     try{
         const {fullName} = req.body
-        console.log(req.file)
-        responseHandler.success(res , "Profile update Successfully")
+
+        const updateFields = {}
+        if(fullName) updateFields.fullName = fullName
+        if(req.file) {
+            const uploadImage = await uploadToCloudinary(req.file.buffer)
+            if(uploadImage) updateFields.avatar = uploadImage.secure_url
+        }
+        const user = await userSchema.findByIdAndUpdate(req.user._id , updateFields , {new:true}).select('fullName email role avatar')
+        
+        responseHandler.success(res , "Profile update Successfully", user)
     }
     catch(err){
         responseHandler.error(res , "Internal Server Error")
