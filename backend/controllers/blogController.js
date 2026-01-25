@@ -1,5 +1,6 @@
 const blogSchema = require("../models/blogSchema")
 const responseHandler = require("../services/responseHandler")
+const { generateBlogSlug } = require("../services/utils")
 
 // --------------------Create blog Controller-----------------------
 const createBlog = async(req , res)=>{
@@ -10,9 +11,14 @@ const createBlog = async(req , res)=>{
         if(!content){ return responseHandler.error(res, "Content is required", 400)}
         if(!tags){ return responseHandler.error(res, "Tags is required", 400)}
 
+        const slug = generateBlogSlug(title);
+        const existingBlog = await blogSchema.findOne({slug})
+        if(existingBlog) { return responseHandler.error(res , "Blog with this Title already exists" , 400)}
+
         const newBlog = new blogSchema({
             title,
             content,
+            slug,
             tags,
             author:authorId
         })
@@ -24,5 +30,19 @@ const createBlog = async(req , res)=>{
         console.log(err)
     }
 }
+// --------------------get blog with slug Controller-----------------------
+const getSlugBlog = async (req , res)=>{
+    try {
+        const slug = req.params.slug
+        const blog = await blogSchema.findOne({slug}).populate("author" , "fullName email")
+        if(!blog){return responseHandler.error(res , "Blog not found", 400)}
+        console.log("this is blog post" , blog)
+        responseHandler.success(res , "Blog Post get successfully", blog)
+    } catch (err) {
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
 
-module.exports = {createBlog}
+
+module.exports = {createBlog , getSlugBlog}

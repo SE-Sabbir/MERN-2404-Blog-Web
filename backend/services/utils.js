@@ -34,5 +34,12 @@ const generateResetPasswordToken = () =>{
 
     return {resetPasswordToken , hashToken}
 }
+// ----- generate Blog slug from title
+const generateBlogSlug = (title)=>{
+    return title
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+}
 
-module.exports = {generateOTP , generateAccessToken , generateRefreshToken , generateResetPasswordToken}
+
+module.exports = {generateOTP , generateAccessToken , generateRefreshToken , generateResetPasswordToken , generateBlogSlug}
