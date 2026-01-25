@@ -12,13 +12,13 @@ const crypto = require('crypto');
 const registerUser = async (req , res)=>{
     try{
         const {fullName , email , password} = req.body
-        if(!fullName) return responseHandler.error(res,"UserName required" , 400)
-        if(!emailRegex.test(email)) return responseHandler.error(res , "Email is not valid" , 400)
-        if(password.length < 6 || password.length > 12 ) return responseHandler.error(res, "Password need minimum 6 letter " ,400)
-        if(!passwordRegex.test(password)) return responseHandler.error(res , "Please enter a strong password" , 400)
+        if(!fullName) {return responseHandler.error(res,"UserName required" , 400)}
+        if(!emailRegex.test(email)) {return responseHandler.error(res , "Email is not valid" , 400)}
+        if(password.length < 6 || password.length > 12 ) {return responseHandler.error(res, "Password need minimum 6 letter " ,400)}
+        if(!passwordRegex.test(password)) {return responseHandler.error(res , "Please enter a strong password" , 400)}
         // ------find user with email
         const existindUser = await userSchema.findOne({email})
-        if(existindUser) return responseHandler.error(res , "Email already registered")
+        if(existindUser) {return responseHandler.error(res , "Email already registered")}
         const OTP = generateOTP()
         const user = new userSchema({fullName , email , password , otp:OTP , otpExpiry:Date.now() + 10 * 60 * 1000 })
         await user.save()
@@ -35,11 +35,11 @@ const registerUser = async (req , res)=>{
 const verifyOTP =async (req , res)=>{
     try{
         const {email , otp} = req.body
-        if(!email) return responseHandler.error(res , "Email is required")
-        if(!otp) return responseHandler.error(res , "Otp is required")
+        if(!email) {return responseHandler.error(res , "Email is required")}
+        if(!otp) {return responseHandler.error(res , "Otp is required")}
         // ------find user with email otp & otpExpiry date
         const user = await userSchema.findOne({email, otp , otpExpiry:{$gt: Date.now() }})
-        if(!user) return responseHandler.error(res , "Invalid or expired OTP", 400)
+        if(!user) {return responseHandler.error(res , "Invalid or expired OTP", 400)}
         user.isVerified = true;
         user.otp = null;
         user.otpExpiry = null;
@@ -55,15 +55,15 @@ const verifyOTP =async (req , res)=>{
 const loginUser = async(req , res)=>{
     try{
         const {email , password} = req.body
-        if(!email) return responseHandler.error(res , "Email is required" , 400)
-        if(!password) return responseHandler.error(res , "Password is required" , 400)
+        if(!email) {return responseHandler.error(res , "Email is required" , 400)}
+        if(!password) {return responseHandler.error(res , "Password is required" , 400)}
         // ------find user with email
         const user = await userSchema.findOne({email})
-        if(!user) return responseHandler.error(res , "Invalid Credentials" , 400)
-        if(!user.isVerified) return responseHandler.error(res , "Email is not verified")
+        if(!user) {return responseHandler.error(res , "Invalid Credentials" , 400)}
+        if(!user.isVerified) {return responseHandler.error(res , "Email is not verified")}
         // ------password compare form db
         const isPasswordValid = await user.verifyPassword(password)
-        if(!isPasswordValid) return responseHandler.error(res , "Invalid Credentials" , 400)
+        if(!isPasswordValid){ return responseHandler.error(res , "Invalid Credentials" , 400)}
         // ----- generate access token form user
         const accessToken = generateAccessToken(user._id, user.email, user.role)
         const refreshToken = generateRefreshToken(user._id, user.email, user.role)
@@ -86,9 +86,9 @@ const loginUser = async(req , res)=>{
 const forgatePassword = async (req , res)=>{
     try{
         const {email} = req.body
-        if(!email) return responseHandler.error(res , "Email is required" , 400)
+        if(!email) {return responseHandler.error(res , "Email is required" , 400)}
         const existUser = await userSchema.findOne({email})
-        if(!existUser) return responseHandler.error(res , "Email not registered" , 400)
+        if(!existUser) {return responseHandler.error(res , "Email not registered" , 400)}
         const {resetPasswordToken , hashToken} = generateResetPasswordToken()
 
         existUser.resetPasswordToken = hashToken;
@@ -109,14 +109,14 @@ const resetPassword =async(req , res)=>{
     try{
         const {newPassword} = req.body
         const {token} = req.params;
-        if(!newPassword) return responseHandler.error(res , "New Password is required" , 400)
-        if(!token) return responseHandler.error(res , "Invalid Request" , 400)
+        if(!newPassword){return responseHandler.error(res , "New Password is required" , 400)}
+        if(!token) {return responseHandler.error(res , "Invalid Request" , 400)}
         const hashToken = crypto.createHash('sha256').update(token).digest('hex');
 
         const user = await userSchema.findOne({
             resetPasswordToken:hashToken,resetPasswordExpiry:{$gt:Date.now()}
         })
-        if(!user) return responseHandler.error(res , "Invalid or expired token", 400)
+        if(!user) {return responseHandler.error(res , "Invalid or expired token", 400)}
         user.password = newPassword;
         user.resetPasswordToken = null;
         user.resetPasswordExpiry = null;
