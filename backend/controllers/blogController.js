@@ -47,7 +47,6 @@ const getSlugBlog = async (req , res)=>{
 const deleteBlog = async(req , res) =>{
     try {
         const {blogId} = req.body
-        console.log(blogId)
         if(!blogId) {return responseHandler.error(res , "Blog Id is required" , 400)}
         const existingBlog = await blogSchema.findById(blogId).select("_id title")
         if(!existingBlog) { return responseHandler.error(res , "Blog not found" , 400)}
@@ -58,6 +57,30 @@ const deleteBlog = async(req , res) =>{
         console.log(err)
     }
 }
+// --------------------Blog List Controller-----------------------
+const blogList = async(req , res)=>{
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+        const skip = (page - 1) * limit
+
+        const totalCount = await blogSchema.countDocuments()
+        const blogs = await blogSchema.find().sort({createdAt: -1}).skip(skip).limit(limit)
+        const simplifyRes = {
+            data:blogs,
+            pagination:{
+                page,
+                limit,
+                totalItems:totalCount,
+                totalPage: Math.ceil(totalCount / limit)
+            }
+        }
+        responseHandler.success(res , "Blog List get Success" , simplifyRes)
+    } catch (err) {
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
 
 
-module.exports = {createBlog , getSlugBlog , deleteBlog}
+module.exports = {createBlog , getSlugBlog , deleteBlog , blogList}
