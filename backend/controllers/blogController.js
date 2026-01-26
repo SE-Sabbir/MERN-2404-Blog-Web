@@ -43,6 +43,21 @@ const getSlugBlog = async (req , res)=>{
         console.log(err)
     }
 }
+// --------------------delete Blog Controller-----------------------
+const deleteBlog = async(req , res) =>{
+    try {
+        const {blogId} = req.body
+        console.log(blogId)
+        if(!blogId) {return responseHandler.error(res , "Blog Id is required" , 400)}
+        const existingBlog = await blogSchema.findById(blogId).select("_id title")
+        if(!existingBlog) { return responseHandler.error(res , "Blog not found" , 400)}
+        await blogSchema.findByIdAndDelete(existingBlog._id)
+        responseHandler.success(res , "Blog delete successfull")
+    } catch (err) {
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
 
 
-module.exports = {createBlog , getSlugBlog}
+module.exports = {createBlog , getSlugBlog , deleteBlog}

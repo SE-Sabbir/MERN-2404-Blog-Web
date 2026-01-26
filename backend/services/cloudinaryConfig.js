@@ -13,5 +13,10 @@ const cloudinary = require('cloudinary').v2
             folder: "blog_profile"
         })
     }
+    const deleteFromCloudinary = (avatar)=>{
+        const publicId = avatar.split("/").pop().split(".")[0]
+        console.log("public id " , publicId)
+        return cloudinary.uploader.destroy(`blog_profile/${publicId}`)
+    }
 
-module.exports = {uploadToCloudinary}
+module.exports = {uploadToCloudinary , deleteFromCloudinary}

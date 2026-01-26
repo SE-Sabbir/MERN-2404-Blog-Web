@@ -1,6 +1,6 @@
 const userSchema = require("../models/userSchema")
 const { emailRegex, passwordRegex } = require("../services/allRegex")
-const { uploadToCloudinary } = require("../services/cloudinaryConfig")
+const { uploadToCloudinary, deleteFromCloudinary } = require("../services/cloudinaryConfig")
 const sendMail = require("../services/mailSender")
 const { verifyOtpTemplate, resetPasswordTemplate } = require("../services/mailTemplate")
 const responseHandler = require("../services/responseHandler")
@@ -142,16 +142,18 @@ const getUserProfile = async(req , res)=>{
 const updateProfile = async(req , res)=>{
     try{
         const {fullName} = req.body
+        console.log(fullName)
+        const existingUser = await userSchema.findById(req.user._id).select("fullName email role avatar")
+        if(fullName) existingUser.fullName = fullName
 
-        const updateFields = {}
-        if(fullName) updateFields.fullName = fullName
         if(req.file) {
+            deleteFromCloudinary(existingUser.avatar)
             const uploadImage = await uploadToCloudinary(req.file.buffer)
-            if(uploadImage) updateFields.avatar = uploadImage.secure_url
+            if(uploadImage?.secure_url) existingUser.avatar = uploadImage.secure_url
         }
-        const user = await userSchema.findByIdAndUpdate(req.user._id , updateFields , {new:true}).select('fullName email role avatar')
+        existingUser.save()
         
-        responseHandler.success(res , "Profile update Successfully", user)
+        responseHandler.success(res , "Profile update Successfully", existingUser)
     }
     catch(err){
         responseHandler.error(res , "Internal Server Error")
