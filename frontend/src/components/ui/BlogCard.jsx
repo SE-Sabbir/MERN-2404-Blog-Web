@@ -1,7 +1,8 @@
 import React from 'react'
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router';
 
-const BlogCard = ({post}) => {
+const BlogCard = ({post , slug}) => {
   return (
     <article className="group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       {/* Image Container */}
@@ -42,10 +43,10 @@ const BlogCard = ({post}) => {
             <img src={post.authorAvatar} className="w-8 h-8 rounded-full border border-gray-100" alt={post.author} />
             <span className="text-sm font-medium text-gray-700">{post.author}</span>
           </div>
-          <button className="text-indigo-600 font-semibold text-sm flex items-center gap-1 group/btn">
+          <Link to={`/blog/${slug}`} className="text-indigo-600 font-semibold text-sm flex items-center gap-1 group/btn">
             Read More 
             <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-          </button>
+          </Link>
         </div>
       </div>
     </article>

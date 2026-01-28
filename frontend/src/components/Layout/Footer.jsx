@@ -82,14 +82,14 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-400 text-xs">
-            © {currentYear} DevBlog Media Inc. All rights reserved.
+            © {currentYear} SabbirDev. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <a href="#" className="text-gray-400 hover:text-gray-600 text-xs">Terms</a>
             <a href="#" className="text-gray-400 hover:text-gray-600 text-xs">Cookies</a>
             <div className="flex items-center gap-1 text-gray-400 text-xs">
               <Mail size={12} />
-              <span>hello@devblog.com</span>
+              <span>sabbirhp50@gmail.com.com</span>
             </div>
           </div>
         </div>
