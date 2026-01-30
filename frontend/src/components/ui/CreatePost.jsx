@@ -1,8 +1,9 @@
+import { ImageIcon } from 'lucide-react'
 import React from 'react'
 
 const CreatePost = () => {
   return (
-    <div className="max-w-4xl space-y-6">
+<div className="max-w-4xl space-y-6">
       <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Post Title</label>

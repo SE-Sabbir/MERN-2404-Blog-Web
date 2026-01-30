@@ -1,7 +1,7 @@
 import React from 'react'
 import {  LogOut,Zap, MoreVertical,Edit,Trash2,} from 'lucide-react'
 
-const ListTable = () => {
+const PostList = () => {
     const posts = [
     { id: 1, title: "Mastering React Server Components", status: "Published", date: "Oct 24, 2023", views: "1.2k" },
     { id: 2, title: "Designing for the Modern Web", status: "Draft", date: "Oct 22, 2023", views: "0" },
@@ -42,8 +42,8 @@ const ListTable = () => {
               ))}
             </tbody>
           </table>
-        </div>
+    </div>
   )
 }
 
-export default ListTable
+export default PostList

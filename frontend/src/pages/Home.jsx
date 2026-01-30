@@ -35,6 +35,38 @@ const Home = () => {
       author: "Marcus Thorne",
       authorAvatar: "https://i.pravatar.cc/150?u=marcus",
       image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      id: 5,
+      title: "Designing for the Modern Web",
+      excerpt: "Explore the latest design trends from glassmorphism to bento grids. How to stay relevant in a fast-changing visual landscape...",
+      category: "Design",
+      date: "Oct 22, 2023",
+      readTime: "5 min read",
+      author: "Sarah Chen",
+      authorAvatar: "https://i.pravatar.cc/150?u=sarah",
+      image: "https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      id: 6,
+      title: "The Future of AI in Coding",
+      excerpt: "Is AI replacing developers or empowering them? We look at how LLMs are changing the way we write, debug, and ship code...",
+      category: "Tech",
+      date: "Oct 20, 2023",
+      readTime: "12 min read",
+      author: "Marcus Thorne",
+      authorAvatar: "https://i.pravatar.cc/150?u=marcus",
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80"
+    },{
+      id: 4,
+      title: "Mastering React Server Components",
+      excerpt: "Dive deep into the new era of React with Server Components. Learn how to optimize performance and reduce bundle sizes...",
+      category: "Development",
+      date: "Oct 24, 2023",
+      readTime: "8 min read",
+      author: "Alex Rivera",
+      authorAvatar: "https://i.pravatar.cc/150?u=alex",
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800&q=80"
     }
   ];
   
