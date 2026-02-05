@@ -1,7 +1,13 @@
 import React from 'react'
 import BlogCard from '../components/ui/BlogCard';
+import { useGetBlogListQuery } from '../service/api';
 
 const Home = () => {
+
+  const {data , isLoading , error} = useGetBlogListQuery()
+  console.log(data)
+
+  
     const posts = [
     {
       id: 1,
