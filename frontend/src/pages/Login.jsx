@@ -1,9 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Mail, Lock, Zap, Chrome, Github } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import Navbar from '../components/Layout/Navbar';
+import { useLoginMutation } from '../service/api';
 
 const Login = () => {
+  const [login,{data, error,isLoading, isSuccess}] = useLoginMutation()
+  const navigate = useNavigate()
+  const [formData , setFormData]= useState({
+    email: "",
+    password: "",
+  });
+  const handelChange = (e) =>{
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  }
+  const handleSubmit = async (e) =>{
+    e.preventDefault();
+    try {
+      const res = await login(formData).unwrap();
+      console.log(res.message)
+      if(res.success){
+        navigate("/dashboard")
+      }
+    } catch (error) {
+      console.log(error)
+    } finally{
+      console.log("Data",data)
+    }
+  }
   return (
     <>
     <Navbar/>
@@ -17,20 +44,20 @@ const Login = () => {
           <p className="mt-2 text-gray-500">Please enter your details to sign in</p>
         </div>
         
-        <form className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
           <div className="space-y-4">
             <div>
               <label className="text-sm font-medium text-gray-700">Email</label>
               <div className="mt-1 relative">
                 <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
-                <input type="email" placeholder="you@example.com" className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                <input type="email" name="email" value={formData.email} onChange={handelChange} placeholder="you@example.com" className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
               </div>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700">Password</label>
               <div className="mt-1 relative">
                 <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
-                <input type="password" placeholder="••••••••" className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
+                <input type="password" name="password" value={formData.password} onChange={handelChange} placeholder="••••••••" className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all" />
               </div>
             </div>
           </div>

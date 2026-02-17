@@ -6,8 +6,16 @@ export const api = createApi({
     endpoints:(builder)=>({
         getBlogList:builder.query({
             query:()=> "blog/list"
+        }),
+        login: builder.mutation({
+            query:(data)=>({
+                url: "auth/login",
+                method: "POST",
+                body: data,
+                credentials: "include"
+            })
         })
     })
 })
 
-export const {useGetBlogListQuery} = api;
+export const {useGetBlogListQuery , useLoginMutation} = api;
