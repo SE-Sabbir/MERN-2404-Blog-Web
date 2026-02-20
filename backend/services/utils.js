@@ -6,7 +6,7 @@ const generateOTP = () =>{
     return Math.floor(Math.random()*9000).toString()
 }
 // -------generate access token
-const generateAccessToken = ( _id, email , role) =>{
+const  generateAccessToken = ( _id, email , role) =>{
     return jwt.sign(
     {
     _id,
@@ -40,6 +40,11 @@ const generateBlogSlug = (title)=>{
     .toLowerCase()
     .replace(/\s+/g, "-")
 }
+// ----- generate verify token
+const verifyToken = (token)=>{
+    return jwt.verify(token, process.env.JWT_SECRET)
+}
 
 
-module.exports = {generateOTP , generateAccessToken , generateRefreshToken , generateResetPasswordToken , generateBlogSlug}
+
+module.exports = {generateOTP , generateAccessToken , generateRefreshToken , generateResetPasswordToken , generateBlogSlug , verifyToken }

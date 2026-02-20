@@ -81,6 +81,29 @@ const blogList = async(req , res)=>{
         console.log(err)
     }
 }
+// --------------------Blog List By User Controller-----------------------
+const blogListByUser = async(req , res)=>{
+    try {
+        const page = parseInt(req.query.page) || 1
+        const limit = parseInt(req.query.limit) || 10
+        const skip = (page - 1) * limit
 
+        const totalCount = await blogSchema.countDocuments()
+        const blogs = await blogSchema.find({author: req.user._id}).sort({createdAt: -1}).skip(skip).limit(limit)
+        const simplifyRes = {
+            data:blogs,
+            pagination:{
+                page,
+                limit,
+                totalItems:totalCount,
+                totalPage: Math.ceil(totalCount / limit)
+            }
+        }
+        responseHandler.success(res , "Blog List get Success" , simplifyRes)
+    } catch (err) {
+        responseHandler.error(res , "Internal Server Error")
+        console.log(err)
+    }
+}
 
-module.exports = {createBlog , getSlugBlog , deleteBlog , blogList}
+module.exports = {createBlog , getSlugBlog , deleteBlog , blogList , blogListByUser}

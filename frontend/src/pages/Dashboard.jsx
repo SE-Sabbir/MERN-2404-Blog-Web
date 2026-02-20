@@ -5,6 +5,7 @@ import CreatePost from '../components/ui/CreatePost';
 import PostList from '../components/ui/PostList';
 import OverView from '../components/ui/OverView';
 import Settings from '../components/ui/Settings';
+import { useGetListByUserQuery } from '../service/api';
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

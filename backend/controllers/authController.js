@@ -4,7 +4,7 @@ const { uploadToCloudinary, deleteFromCloudinary } = require("../services/cloudi
 const sendMail = require("../services/mailSender")
 const { verifyOtpTemplate, resetPasswordTemplate } = require("../services/mailTemplate")
 const responseHandler = require("../services/responseHandler")
-const { generateOTP, generateAccessToken, generateRefreshToken, generateResetPasswordToken } = require("../services/utils")
+const { generateOTP, generateAccessToken, generateRefreshToken, generateResetPasswordToken, verifyToken } = require("../services/utils")
 const crypto = require('crypto');
 
 
@@ -160,8 +160,23 @@ const updateProfile = async(req , res)=>{
         console.log(err)
     }
 }
+// ------------------Update User Profile Controller----------------------
+const refreshAccessToken = async(req , res)=>{
+    try {
+        const refreshToken = req.cookies["x-ref_tkn"];
+        if(!refreshToken) return responseHandler.error(res , "Unauthorized access", 401);
+        const decoded = verifyToken(refreshToken);
+        if(!decoded) return responseHandler.error(res , "Unauthorized access", 401);
+        const accessToken = generateAccessToken(decoded._id, decoded.email, decoded.role);
+        res.cookie("x-acc_tkn",accessToken,{
+            httpOnly:true,
+            secure:false,
+        });
+        responseHandler.success(res , "Access token refreshed successfullty");
+    } catch (error) {
+        responseHandler.error(res , "Internal Server Error")
+    }
+}
 
 
-
-
-module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile}
+module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile , refreshAccessToken}
