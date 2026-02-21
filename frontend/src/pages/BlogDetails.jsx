@@ -1,27 +1,30 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router';
 import { Calendar, Clock, User, ArrowLeft, Send, MessageCircle } from 'lucide-react';
+import { useGetSlugBlogQuery } from '../service/api';
 
 const BlogDetails = () => {
-    const { slug } = useParams();
+  const {slug} = useParams()
+    const {data , isLoading , error} = useGetSlugBlogQuery(slug);
+    console.log("this from slug",data)
     const [comment, setComment] = useState("");
 
-    // In a real app, you'd fetch this data from an API using the slug
-    const post = {
-        title: "Mastering React Server Components",
-        content: `
-        <p>React Server Components (RSC) are changing the game for web performance. By moving the rendering logic to the server, we can significantly reduce the amount of JavaScript sent to the client.</p>
-        <p>Imagine a world where your complex data-heavy components don't bloat your bundle size. That's the promise of RSC. It allows developers to write components that run exclusively on the server, fetching data directly from your database or file system.</p>
-        <blockquote>"The future of React isn't just about rendering faster; it's about rendering smarter."</blockquote>
-        <p>In this guide, we'll explore how to implement these patterns in your next project...</p>
-        `,
-        category: "Development",
-        date: "Oct 24, 2023",
-        readTime: "8 min read",
-        author: "Alex Rivera",
-        authorAvatar: "https://i.pravatar.cc/150?u=alex",
-        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80"
-    };
+    // // In a real app, you'd fetch this data from an API using the slug
+    // const post = {
+    //     title: "Mastering React Server Components",
+    //     content: `
+    //     <p>React Server Components (RSC) are changing the game for web performance. By moving the rendering logic to the server, we can significantly reduce the amount of JavaScript sent to the client.</p>
+    //     <p>Imagine a world where your complex data-heavy components don't bloat your bundle size. That's the promise of RSC. It allows developers to write components that run exclusively on the server, fetching data directly from your database or file system.</p>
+    //     <blockquote>"The future of React isn't just about rendering faster; it's about rendering smarter."</blockquote>
+    //     <p>In this guide, we'll explore how to implement these patterns in your next project...</p>
+    //     `,
+    //     category: "Development",
+    //     date: "Oct 24, 2023",
+    //     readTime: "8 min read",
+    //     author: "Alex Rivera",
+    //     authorAvatar: "https://i.pravatar.cc/150?u=alex",
+    //     image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80"
+    // };
 
   return (
     <div className="bg-white min-h-screen pb-20">

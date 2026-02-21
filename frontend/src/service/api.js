@@ -4,9 +4,6 @@ export const api = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({baseUrl:"http://localhost:8000/" , credentials: "include"}),
     endpoints:(builder)=>({
-        getBlogList:builder.query({
-            query:()=> "blog/list"
-        }),
         login: builder.mutation({
             query:(data)=>({
                 url: "auth/login",
@@ -14,19 +11,33 @@ export const api = createApi({
                 body: data
             })
         }),
-        getUser:builder.query({
-            query:()=> "auth/profile",
-        }),
         refreshToken: builder.mutation({
             query:(data)=>({
                 url: "auth/refresh-token",
                 method: "POST",
             })
         }),
+        getUser:builder.query({
+            query:()=> "auth/profile",
+        }),
+        createBlog:builder.mutation({
+            query:(data)=>({
+                url: "blog/upload",
+                method: "POST",
+                body: data
+            })
+        }),
+        getBlogList:builder.query({
+            query:()=> "blog/list"
+        }),
         getListByUser:builder.query({
             query:()=> "blog/list-by-user",
         }),
+        getSlugBlog:builder.query({
+            query:(slug)=> `blog/read/${slug}`
+        })
+
     })
 })
 
-export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery} = api;
+export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery} = api;

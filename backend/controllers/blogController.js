@@ -1,21 +1,27 @@
 const blogSchema = require("../models/blogSchema")
+const { uploadToCloudinary } = require("../services/cloudinaryConfig")
 const responseHandler = require("../services/responseHandler")
 const { generateBlogSlug } = require("../services/utils")
 
 // --------------------Create blog Controller-----------------------
 const createBlog = async(req , res)=>{
     try{
-        const {title, content , tags}= req.body
+        const {title, content , tags }= req.body
+        console.log("this from body", title)
         const authorId = req.user._id
         if(!title){return responseHandler.error(res,"Title is required" , 400)}
         if(!content){ return responseHandler.error(res, "Content is required", 400)}
         if(!tags){ return responseHandler.error(res, "Tags is required", 400)}
-
+        if(!req.file){ return responseHandler.error(res , "Thumbnail image is required", 400)}
         const slug = generateBlogSlug(title);
         const existingBlog = await blogSchema.findOne({slug})
         if(existingBlog) { return responseHandler.error(res , "Blog with this Title already exists" , 400)}
+        // ------upload to cloudinary
+        const uploadResult = await uploadToCloudinary(req.file.buffer)
+        const thumbnailUrl = uploadResult.secure_url;
 
         const newBlog = new blogSchema({
+            thumbnail:thumbnailUrl,
             title,
             content,
             slug,
@@ -65,7 +71,7 @@ const blogList = async(req , res)=>{
         const skip = (page - 1) * limit
 
         const totalCount = await blogSchema.countDocuments()
-        const blogs = await blogSchema.find().sort({createdAt: -1}).skip(skip).limit(limit)
+        const blogs = await blogSchema.find().populate("author", "fullName avatar").sort({createdAt: -1}).skip(skip).limit(limit)
         const simplifyRes = {
             data:blogs,
             pagination:{

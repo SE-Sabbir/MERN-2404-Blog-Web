@@ -7,10 +7,24 @@ import Registration from './pages/Registration'
 import BlogDetails from './pages/BlogDetails'
 import Dashboard from './pages/Dashboard'
 import DashboardLayout from './components/Layout/DashboardLayout'
+import { Toaster } from 'react-hot-toast'
 
 const App = () => {
   return (
     <BrowserRouter>
+    <Toaster 
+        position="top-right"
+        toastOptions={{
+          // Professional styling to match your indigo theme
+          className: 'text-sm font-medium rounded-xl shadow-xl',
+          success: {
+            iconTheme: {
+              primary: '#4f46e5', // Indigo-600
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
     <Routes>
       <Route path='/' element={<Layout/>}>
         <Route index element={<Home/>} />

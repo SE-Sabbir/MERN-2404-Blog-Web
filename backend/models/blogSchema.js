@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const userSchema = require('./userSchema')
 const blogSchema = new mongoose.Schema({
+    thumbnail:{type:String , required:true},
     title:{type:String , required:true},
     content:{type:String, required:true},
     slug:{type:String, required:true},
