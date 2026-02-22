@@ -28,8 +28,6 @@ const CreatePost = () => {
     if (!title || !content || !thumbnail) {
       return toast.error("Please fill all fields and upload a thumbnail");
     }
-    console.log("click hossa")
-
     // Prepare FormData for multipart/form-data request
     const formData = new FormData();
     formData.append('title', title);

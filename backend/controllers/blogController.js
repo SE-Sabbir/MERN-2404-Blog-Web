@@ -7,7 +7,6 @@ const { generateBlogSlug } = require("../services/utils")
 const createBlog = async(req , res)=>{
     try{
         const {title, content , tags }= req.body
-        console.log("this from body", title)
         const authorId = req.user._id
         if(!title){return responseHandler.error(res,"Title is required" , 400)}
         if(!content){ return responseHandler.error(res, "Content is required", 400)}
@@ -40,7 +39,7 @@ const createBlog = async(req , res)=>{
 const getSlugBlog = async (req , res)=>{
     try {
         const slug = req.params.slug
-        const blog = await blogSchema.findOne({slug}).populate("author" , "fullName email")
+        const blog = await blogSchema.findOne({slug}).populate("author" , "fullName email avatar")
         if(!blog){return responseHandler.error(res , "Blog not found", 400)}
         console.log("this is blog post" , blog)
         responseHandler.success(res , "Blog Post get successfully", blog)
@@ -95,7 +94,7 @@ const blogListByUser = async(req , res)=>{
         const skip = (page - 1) * limit
 
         const totalCount = await blogSchema.countDocuments()
-        const blogs = await blogSchema.find({author: req.user._id}).sort({createdAt: -1}).skip(skip).limit(limit)
+        const blogs = await blogSchema.find({author: req.user._id}).populate("author", "fullName avatar").sort({createdAt: -1}).skip(skip).limit(limit)
         const simplifyRes = {
             data:blogs,
             pagination:{

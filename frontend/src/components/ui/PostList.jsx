@@ -4,7 +4,6 @@ import { useGetListByUserQuery } from '../../service/api'
 
 const PostList = () => {
   const {data , isLoading , error} = useGetListByUserQuery()
-  console.log("list data",data)
   // -----date formate
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };

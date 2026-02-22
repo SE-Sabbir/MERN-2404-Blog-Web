@@ -34,7 +34,7 @@ export const api = createApi({
             query:()=> "blog/list-by-user",
         }),
         getSlugBlog:builder.query({
-            query:(slug)=> `blog/read/${slug}`
+            query:(slug)=> `blog/${slug}`
         })
 
     })

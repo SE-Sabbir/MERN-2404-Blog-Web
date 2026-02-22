@@ -3,9 +3,10 @@ import { Mail, Lock, Zap, Chrome, Github } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
 import Navbar from '../components/Layout/Navbar';
 import { useLoginMutation } from '../service/api';
+import toast from 'react-hot-toast';
 
 const Login = () => {
-  const [login,{data, error,isLoading, isSuccess}] = useLoginMutation()
+  const [login,{data, error,isLoading}] = useLoginMutation()
   const navigate = useNavigate()
   const [formData , setFormData]= useState({
     email: "",
@@ -19,16 +20,16 @@ const Login = () => {
   }
   const handleSubmit = async (e) =>{
     e.preventDefault();
+
     try {
       const res = await login(formData).unwrap();
-      console.log(res.message)
       if(res.success){
         navigate("/dashboard")
+        toast.success("User Login successfull")
       }
     } catch (error) {
+      toast.error(error?.data?.message || "Failed to Login");
       console.log(error)
-    } finally{
-      console.log("Data",data)
     }
   }
   return (

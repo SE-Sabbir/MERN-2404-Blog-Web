@@ -142,7 +142,6 @@ const getUserProfile = async(req , res)=>{
 const updateProfile = async(req , res)=>{
     try{
         const {fullName} = req.body
-        console.log(fullName)
         const existingUser = await userSchema.findById(req.user._id).select("fullName email role avatar")
         if(fullName) existingUser.fullName = fullName
 

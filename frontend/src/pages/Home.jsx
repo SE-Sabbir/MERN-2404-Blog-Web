@@ -1,12 +1,12 @@
 import React from 'react'
 import BlogCard from '../components/ui/BlogCard';
 import { useGetBlogListQuery } from '../service/api';
+import PageLoader from '../components/ui/PageLoader';
 
 const Home = () => {
 
   const {data , isLoading , error} = useGetBlogListQuery()
-  console.log(data)
-
+  if(isLoading) return <PageLoader/>
   
   //   const posts = [
   //   {

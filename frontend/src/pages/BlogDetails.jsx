@@ -2,29 +2,21 @@ import React, { useState } from 'react'
 import { useParams, Link } from 'react-router';
 import { Calendar, Clock, User, ArrowLeft, Send, MessageCircle } from 'lucide-react';
 import { useGetSlugBlogQuery } from '../service/api';
+import PageLoader from '../components/ui/PageLoader';
 
 const BlogDetails = () => {
-  const {slug} = useParams()
-    const {data , isLoading , error} = useGetSlugBlogQuery(slug);
-    console.log("this from slug",data)
+    const {slug} = useParams();
     const [comment, setComment] = useState("");
+    const {data , isLoading , error} = useGetSlugBlogQuery(slug);
+    if(isLoading) return <PageLoader/>
+    if(error) return console.log(error)
+    if(!data) return <div>Post not found</div>
 
-    // // In a real app, you'd fetch this data from an API using the slug
-    // const post = {
-    //     title: "Mastering React Server Components",
-    //     content: `
-    //     <p>React Server Components (RSC) are changing the game for web performance. By moving the rendering logic to the server, we can significantly reduce the amount of JavaScript sent to the client.</p>
-    //     <p>Imagine a world where your complex data-heavy components don't bloat your bundle size. That's the promise of RSC. It allows developers to write components that run exclusively on the server, fetching data directly from your database or file system.</p>
-    //     <blockquote>"The future of React isn't just about rendering faster; it's about rendering smarter."</blockquote>
-    //     <p>In this guide, we'll explore how to implement these patterns in your next project...</p>
-    //     `,
-    //     category: "Development",
-    //     date: "Oct 24, 2023",
-    //     readTime: "8 min read",
-    //     author: "Alex Rivera",
-    //     authorAvatar: "https://i.pravatar.cc/150?u=alex",
-    //     image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=1200&q=80"
-    // };
+    // -----date formate
+    const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
   return (
     <div className="bg-white min-h-screen pb-20">
@@ -37,23 +29,23 @@ const BlogDetails = () => {
           
           <div className="flex items-center gap-2 mb-6">
             <span className="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase">
-              {post.category}
+              {data?.data?.tags}
             </span>
             <span className="text-gray-400">•</span>
             <span className="text-gray-500 text-sm flex items-center gap-1">
-              <Clock size={14} /> {post.readTime}
+              <Clock size={14} /> {formatDate(data?.data?.createdAt)}
             </span>
           </div>
 
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-8">
-            {post.title}
+            {data?.data?.title}
           </h1>
 
           <div className="flex items-center gap-4">
-            <img src={post.authorAvatar} alt={post.author} className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
+            <img src={data?.data.author.avatar} alt={data?.data?.author?.avatar} className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
             <div>
-              <p className="text-gray-900 font-bold">{post.author}</p>
-              <p className="text-gray-500 text-sm">{post.date}</p>
+              <p className="text-gray-900 font-bold">{data?.data?.author?.fullName}</p>
+              {/* <p className="text-gray-500 text-sm">{post.date}</p> */}
             </div>
           </div>
         </div>
@@ -62,14 +54,14 @@ const BlogDetails = () => {
       {/* Main Content */}
       <main className="max-w-6xl mx-auto px-4 -mt-10">
         <img 
-          src={post.image} 
+          src={data?.data?.thumbnail} 
           alt="Cover" 
           className="w-full h-100 object-cover rounded-3xl shadow-2xl mb-12 border-8 border-white"
         />
         
         <div 
           className="prose prose-lg prose-indigo max-w-none text-gray-700 leading-relaxed space-y-6"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: data?.data?.content }}
         />
 
         <hr className="my-16 border-gray-100" />
@@ -113,7 +105,9 @@ const BlogDetails = () => {
             </div>
           </div>
         </section>
+        
       </main>
+      
     </div>
   )
 }

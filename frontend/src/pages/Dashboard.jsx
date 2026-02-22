@@ -5,9 +5,10 @@ import CreatePost from '../components/ui/CreatePost';
 import PostList from '../components/ui/PostList';
 import OverView from '../components/ui/OverView';
 import Settings from '../components/ui/Settings';
-import { useGetListByUserQuery } from '../service/api';
+
 
 const Dashboard = () => {
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('posts');
 
@@ -51,7 +52,7 @@ const Dashboard = () => {
               <PlusCircle size={18} /> 
               <span className="hidden sm:inline">New Post</span>
             </button>
-            <img src="https://i.pravatar.cc/150?u=alex" className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-200" alt="Avatar" />
+            <img src="https://res.cloudinary.com/dxr5inpsy/image/upload/v1769445060/blog_profile/jvo7lt3cm9ejydvqhusc.png" className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-200" alt="Avatar" />
           </div>
         </header>
 
