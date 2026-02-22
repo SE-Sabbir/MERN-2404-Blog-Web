@@ -176,6 +176,24 @@ const refreshAccessToken = async(req , res)=>{
         responseHandler.error(res , "Internal Server Error")
     }
 }
+// ------------------Logout User Profile Controller----------------------
+const logOut = async(req , res)=>{
+    try {
+        const cookieOptions = {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'Lax',
+            path: '/'
+        };
+        res.clearCookie('x-acc-tkn', cookieOptions);
+        res.clearCookie('x-ref-tkn', cookieOptions);
+
+        console.log('Logout triger hossa')
+        responseHandler.success(res , "Logged out successfully");
+    } catch (error) {
+        responseHandler.error(res, "Internal Server Error")
+    }
+}
 
 
-module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile , refreshAccessToken}
+module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile , refreshAccessToken , logOut}

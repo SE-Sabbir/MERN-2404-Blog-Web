@@ -11,6 +11,12 @@ export const api = createApi({
                 body: data
             })
         }),
+        logout: builder.mutation({
+            query:()=> ({
+                url:"auth/logout",
+                method: "POST"
+            })
+        }),
         refreshToken: builder.mutation({
             query:(data)=>({
                 url: "auth/refresh-token",
@@ -40,4 +46,4 @@ export const api = createApi({
     })
 })
 
-export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery} = api;
+export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation} = api;

@@ -1,6 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { LayoutDashboard, FileText, PlusCircle, Settings, BarChart3, LogOut, Zap, X } from 'lucide-react';
+import { useLogoutMutation } from '../../service/api';
 const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
     const menuItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -9,6 +10,18 @@ const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
     { id: 'stats', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Admin Account', icon: Settings },
   ];
+  // ---- Logout and remove cookies
+  const navigate = useNavigate()
+  const [logout] = useLogoutMutation()
+  const handleLogout =async ()=>{
+    try {
+      await logout().unwrap();
+      localStorage.removeItem('user_data');
+      navigate('/');
+    } catch (error) {
+      console.log("Failed to Logout",error)
+    }
+  }
   return (
     <>
       {/* 1. Mobile Backdrop */}
@@ -67,12 +80,10 @@ const Sidebar = ({ isOpen, setIsOpen, activeTab, setActiveTab }) => {
         <div className="shrink-0">
           {/* Logout Button */}
           <div className="px-6 pb-8">
-            <Link to="/">
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 cursor-pointer hover:bg-red-50 rounded-2xl transition-all group">
+            <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-red-500 cursor-pointer hover:bg-red-50 rounded-2xl transition-all group">
               <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
               Logout
             </button>
-            </Link>
           </div>
         </div>
       </aside>
