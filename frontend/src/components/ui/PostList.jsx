@@ -1,17 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {  LogOut,Zap, MoreVertical,Edit,Trash2,} from 'lucide-react'
-import { useGetListByUserQuery } from '../../service/api'
+import { useDeleteBlogMutation, useGetListByUserQuery } from '../../service/api'
+import DeleteModal from './DeleteModal';
+import toast from 'react-hot-toast';
 
 const PostList = () => {
-  const {data , isLoading , error} = useGetListByUserQuery()
+  const {data , isLoading , error} = useGetListByUserQuery();
+
+  const [deleteBlog,] = useDeleteBlogMutation();
+
+  // Modal States
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+
+  // Open modal and store post data
+  const openDeleteModal = (post) => {
+    console.log("this is open modal" , post)
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
+
+  // Close modal and reset data
+  const closeDeleteModal = () => {
+    setIsModalOpen(false);
+    setSelectedPost(null);
+  };
+  
+  const handleConfirmedDelete =async ()=>{
+    if(selectedPost){
+      try {
+        await deleteBlog(selectedPost._id).unwrap();
+        closeDeleteModal();
+        toast.success("Blog Post delete successfull")
+      } catch (error) {
+        console.log("Delete failed",error)
+      }
+    }
+
+  }
   // -----date formate
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
-
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <DeleteModal 
+        isOpen={isModalOpen} 
+        onClose={closeDeleteModal} 
+        onConfirm={handleConfirmedDelete}
+        title={selectedPost?.title}
+      />
           <table className="w-full text-left">
             <thead className="bg-gray-50 border-b border-gray-100">
               <tr>
@@ -44,7 +83,7 @@ const PostList = () => {
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
                       <button className="p-1 text-gray-400 hover:text-indigo-600"><Edit size={18} /></button>
-                      <button className="p-1 text-gray-400 hover:text-red-600"><Trash2 size={18} /></button>
+                      <button onClick={()=>openDeleteModal(post)} className="p-1 text-gray-400 hover:text-red-600"><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>

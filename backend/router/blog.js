@@ -6,7 +6,7 @@ const upload = multer()
 const router = express.Router()
 
 router.post('/upload', authMiddleware, upload.single("thumbnail"),createBlog)
-router.delete('/delete' , authMiddleware ,deleteBlog)
+router.delete('/:id' , authMiddleware ,deleteBlog)
 router.get('/list', blogList)
 router.get('/list-by-user' , authMiddleware , blogListByUser )
 router.get('/:slug' , getSlugBlog)

@@ -51,9 +51,10 @@ const getSlugBlog = async (req , res)=>{
 // --------------------delete Blog Controller-----------------------
 const deleteBlog = async(req , res) =>{
     try {
-        const {blogId} = req.body
-        if(!blogId) {return responseHandler.error(res , "Blog Id is required" , 400)}
-        const existingBlog = await blogSchema.findById(blogId).select("_id title")
+        const {id} = req.params
+        console.log("blog id controller" , id)
+        if(!id) {return responseHandler.error(res , "Blog Id is required" , 400)}
+        const existingBlog = await blogSchema.findById(id).select("_id title")
         if(!existingBlog) { return responseHandler.error(res , "Blog not found" , 400)}
         await blogSchema.findByIdAndDelete(existingBlog._id)
         responseHandler.success(res , "Blog delete successfull")

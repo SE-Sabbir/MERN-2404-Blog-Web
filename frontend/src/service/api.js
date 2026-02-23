@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const api = createApi({
     reducerPath:"api",
     baseQuery:fetchBaseQuery({baseUrl:"http://localhost:8000/" , credentials: "include"}),
+    tagTypes:['Posts'],
     endpoints:(builder)=>({
         login: builder.mutation({
             query:(data)=>({
@@ -31,19 +32,28 @@ export const api = createApi({
                 url: "blog/upload",
                 method: "POST",
                 body: data
-            })
+            }),
+            invalidatesTags:['Posts']
         }),
         getBlogList:builder.query({
             query:()=> "blog/list"
         }),
         getListByUser:builder.query({
             query:()=> "blog/list-by-user",
+            providesTags:['Posts']
         }),
         getSlugBlog:builder.query({
             query:(slug)=> `blog/${slug}`
+        }),
+        deleteBlog: builder.mutation({
+            query:(id)=>({
+                url: `blog/${id}`,
+                method: "DELETE"
+            }),
+            invalidatesTags:['Posts']
         })
 
     })
 })
 
-export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation} = api;
+export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation , useDeleteBlogMutation} = api;
