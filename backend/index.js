@@ -10,7 +10,7 @@ app.use(cookieParser())
 console.log(process.env.CLIENT_URL)
 app.use(cors(
   {
-    origin:process.env.CLIENT_URL,
+    origin:"https://devblog-murex-three.vercel.app",
     credentials: true
   }
 ))
