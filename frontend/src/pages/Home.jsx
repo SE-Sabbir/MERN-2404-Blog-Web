@@ -7,7 +7,6 @@ const Home = () => {
 
   const {data , isLoading , error} = useGetBlogListQuery()
   if(isLoading) return <PageLoader/>
-  
   //   const posts = [
   //   {
   //     id: 1,
