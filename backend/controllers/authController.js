@@ -71,9 +71,11 @@ const loginUser = async(req , res)=>{
         res.cookie("x-acc-tkn", accessToken ,{
             httpOnly: true,
             secure: true,
+            sameSite:"none"
         }).cookie("x-ref-tkn" , refreshToken , {
             httpOnly: true,
             secure: true,
+            sameSite:"none"
         })
         responseHandler.success(res , "Login successfull")
     }
