@@ -183,8 +183,8 @@ const logOut = async(req , res)=>{
     try {
         const cookieOptions = {
             httpOnly: true,
-            secure: false,
-            sameSite: 'Lax',
+            secure: true,
+            sameSite: 'none',
             path: '/'
         };
         res.clearCookie('x-acc-tkn', cookieOptions);
