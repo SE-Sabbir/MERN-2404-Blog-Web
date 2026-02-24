@@ -70,10 +70,10 @@ const loginUser = async(req , res)=>{
         // ----- if password true then show successfull
         res.cookie("x-acc-tkn", accessToken ,{
             httpOnly: true,
-            secure: false
+            secure: true,
         }).cookie("x-ref-tkn" , refreshToken , {
             httpOnly: true,
-            secure: false
+            secure: true,
         })
         responseHandler.success(res , "Login successfull")
     }
