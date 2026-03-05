@@ -28,7 +28,11 @@ const Registration = () => {
     try {
       const res = await register(formData).unwrap();
       if(res.success){
-        navigate("/verify-otp")
+        navigate("/verify-otp",{
+          state:{
+            email:formData.email
+          }
+        })
         toast.success("Verify OTP to Your Email")
       }
     } catch (error) {
