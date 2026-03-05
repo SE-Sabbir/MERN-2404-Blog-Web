@@ -12,7 +12,6 @@ const allowedOrigins = [
   "http://localhost:3000", // if using preview
   "https://devblog-murex-three.vercel.app"
 ];
-
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {

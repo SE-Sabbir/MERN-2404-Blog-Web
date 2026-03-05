@@ -12,6 +12,7 @@ const crypto = require('crypto');
 const registerUser = async (req , res)=>{
     try{
         const {fullName , email , password} = req.body
+        console.log(req.body)
         if(!fullName) {return responseHandler.error(res,"UserName required" , 400)}
         if(!emailRegex.test(email)) {return responseHandler.error(res , "Email is not valid" , 400)}
         if(password.length < 6 || password.length > 12 ) {return responseHandler.error(res, "Password need minimum 6 letter " ,400)}
@@ -23,7 +24,8 @@ const registerUser = async (req , res)=>{
         const user = new userSchema({fullName , email , password , otp:OTP , otpExpiry:Date.now() + 10 * 60 * 1000 })
         await user.save()
         // ------ data save to db and send otp verification email
-        sendMail(email , 'Verify OTP' , verifyOtpTemplate(fullName,OTP) )
+        await sendMail(email , 'Verify OTP' , verifyOtpTemplate(fullName,OTP));
+        console.log("mail run hossa")
         responseHandler.success(res, "user Registered Successfully")
     }
     catch(err){
@@ -32,7 +34,7 @@ const registerUser = async (req , res)=>{
     }
 }
 // ------------------OTP Verify Controller----------------------
-const verifyOTP =async (req , res)=>{
+const verifyOtp =async (req , res)=>{
     try{
         const {email , otp} = req.body
         if(!email) {return responseHandler.error(res , "Email is required")}
@@ -198,4 +200,4 @@ const logOut = async(req , res)=>{
 }
 
 
-module.exports = {registerUser , verifyOTP , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile , refreshAccessToken , logOut}
+module.exports = {registerUser , verifyOtp , loginUser ,forgatePassword , resetPassword , getUserProfile , updateProfile , refreshAccessToken , logOut}

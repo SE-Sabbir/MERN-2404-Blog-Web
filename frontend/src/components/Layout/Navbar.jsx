@@ -83,10 +83,10 @@ const Navbar = () => {
             ))}
             
             <div className="pt-4 border-t border-gray-100 mt-4 space-y-3">
-              <button className="w-full flex items-center justify-center gap-2 text-gray-600 font-medium py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
+              <Link to='/login' className="w-full flex items-center justify-center gap-2 text-gray-600 font-medium py-3 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
                 <UserCircle size={18} />
                 Log in
-              </button>
+              </Link>
               <button className="w-full bg-indigo-600 text-white py-3 rounded-lg font-medium shadow-md">
                 Subscribe
               </button>

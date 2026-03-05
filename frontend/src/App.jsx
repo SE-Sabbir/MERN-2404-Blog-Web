@@ -8,6 +8,7 @@ import BlogDetails from './pages/BlogDetails'
 import Dashboard from './pages/Dashboard'
 import DashboardLayout from './components/Layout/DashboardLayout'
 import { Toaster } from 'react-hot-toast'
+import VerifyOtp from './pages/VerifyOtp'
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
       </Route>
       <Route path='/login' element={<Login/>} />
       <Route path='/register' element={<Registration/>}/>
+      <Route path='/verify-otp' element={<VerifyOtp/>}/>
     </Routes>
     </BrowserRouter>
   )

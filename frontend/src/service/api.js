@@ -12,6 +12,20 @@ export const api = createApi({
                 body: data
             })
         }),
+        registerUser:builder.mutation({
+            query:(data)=>({
+                url:"auth/register",
+                method:"POST",
+                body:data
+            })
+        }) ,
+        verifyOtp: builder.mutation({
+            query:(data)=>({
+                url:"auth/verify-otp",
+                method:"POST",
+                body:data
+            })
+        }),
         logout: builder.mutation({
             query:()=> ({
                 url:"auth/logout",
@@ -56,4 +70,4 @@ export const api = createApi({
     })
 })
 
-export const {useGetBlogListQuery , useLoginMutation , useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation , useDeleteBlogMutation} = api;
+export const {useGetBlogListQuery , useLoginMutation , useRegisterUserMutation , useVerifyOtpMutation, useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation , useDeleteBlogMutation} = api;
