@@ -47,7 +47,7 @@ const BlogCard = ({post , slug}) => {
 
         <div className="pt-4 border-t border-gray-50 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={post.author?.avatar} className="w-8 h-8 rounded-full border border-gray-100" alt={post.author?.fullName} />
+            <img src={post.author?.avatar} className="w-8 h-8 rounded-full object-cover border border-gray-100" alt={post.author?.fullName} />
             <span className="text-sm font-medium text-gray-700">{post.author?.fullName}</span>
           </div>
           <Link to={`/blog/${slug}`} className="text-indigo-600 font-semibold text-sm flex items-center gap-1 group/btn">

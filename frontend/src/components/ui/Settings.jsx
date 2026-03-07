@@ -1,18 +1,39 @@
 import React, { useState } from 'react'
 import { User, Lock, Bell, Camera, Mail, ShieldCheck, Save, Phone, Home } from 'lucide-react';
-import { useGetUserProfileQuery } from '../../service/api';
+import { useGetUserProfileQuery, useUpdateProfileMutation } from '../../service/api';
+import toast from 'react-hot-toast';
 
 const Settings = () => {
 
     const {data , isLoading , error} = useGetUserProfileQuery();
     console.log(data);
+    const [updateProfile] = useUpdateProfileMutation();
+    const [profileImg, setProfileImg] = useState(data?.data?.avatar);
     const [activeTab, setActiveTab] = useState('profile');
 
+    const [formData, setFormData] = useState({
+        fullName: data?.data?.fullName,
+        email: data?.data?.email,
+        bio: data?.data?.bio,
+        phone: data?.data?.phone,
+        location: data?.data?.location,
+    });
+
     const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-        setProfileImg(URL.createObjectURL(file));
+      console.log(e.target.files[0]);
+    };
+
+    const handleUpdateProfile = async (e) => {
+      e.preventDefault();
+      try {
+        const res = await updateProfile(formData).unwrap();
+        if(res.success){
+          toast.success("Profile Updated Successfully");
         }
+      } catch (error) {
+        toast.error(error?.data?.message || "Failed to Update Profile");
+        console.log(error);
+      }
     };
 
     const tabs = [
@@ -53,7 +74,7 @@ const Settings = () => {
             <div className="flex items-center gap-6">
               <div className="relative group">
                 <img 
-                  src={data?.data?.avatar} 
+                  src={profileImg} 
                   alt="Profile" 
                   className="w-24 h-24 rounded-3xl object-cover border-4 border-indigo-50" 
                 />
@@ -63,7 +84,7 @@ const Settings = () => {
                 </label>
               </div>
               <div>
-                <button className="text-sm font-bold text-indigo-600 hover:underline">Change Avatar</button>
+                <button  className="text-sm font-bold text-indigo-600 hover:underline">Change Avatar</button>
                 <p className="text-xs text-gray-400 mt-1">JPG, GIF or PNG. Max size 2MB.</p>
               </div>
             </div>
@@ -126,7 +147,7 @@ const Settings = () => {
           <button className="px-6 py-2.5 rounded-xl font-bold text-gray-600 hover:bg-gray-100 transition-all">
             Discard
           </button>
-          <button className="flex items-center gap-2 px-8 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95">
+          <button onClick={handleUpdateProfile} className="flex items-center gap-2 px-8 py-2.5 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition-all active:scale-95">
             <Save size={18} />
             Save Changes
           </button>
