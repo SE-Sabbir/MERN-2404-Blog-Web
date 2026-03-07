@@ -5,12 +5,15 @@ import CreatePost from '../components/ui/CreatePost';
 import PostList from '../components/ui/PostList';
 import OverView from '../components/ui/OverView';
 import Settings from '../components/ui/Settings';
+import { useGetUserProfileQuery } from '../service/api';
 
 
 const Dashboard = () => {
 
+  const {data , isLoading , error} = useGetUserProfileQuery();
+  console.log(data);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('posts');
+  const [activeTab, setActiveTab] = useState('overview');
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -40,7 +43,7 @@ const Dashboard = () => {
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 capitalize">
                 {activeTab.replace('-', ' ')}
               </h1>
-              <p className="text-gray-500 text-xs md:text-sm">Welcome back, Alex.</p>
+              <p className="text-gray-500 text-xs md:text-sm">Welcome back, {data?.data?.fullName}</p>
             </div>
           </div>
 
@@ -52,7 +55,8 @@ const Dashboard = () => {
               <PlusCircle size={18} /> 
               <span className="hidden sm:inline">New Post</span>
             </button>
-            <img src="https://res.cloudinary.com/dxr5inpsy/image/upload/v1769445060/blog_profile/jvo7lt3cm9ejydvqhusc.png" className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-200" alt="Avatar" />
+            <img src={data?.data?.avatar}
+            className="w-9 h-9 md:w-10 md:h-10 rounded-full border border-gray-200 object-cover " alt="Avatar" />
           </div>
         </header>
 

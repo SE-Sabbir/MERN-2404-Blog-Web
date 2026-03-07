@@ -1,9 +1,12 @@
 import React, { useState } from 'react'
-import { User, Lock, Bell, Camera, Globe, Mail, ShieldCheck, Save } from 'lucide-react';
+import { User, Lock, Bell, Camera, Mail, ShieldCheck, Save, Phone, Home } from 'lucide-react';
+import { useGetUserProfileQuery } from '../../service/api';
 
 const Settings = () => {
+
+    const {data , isLoading , error} = useGetUserProfileQuery();
+    console.log(data);
     const [activeTab, setActiveTab] = useState('profile');
-    const [profileImg, setProfileImg] = useState("https://i.pravatar.cc/150?u=alex");
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -50,7 +53,7 @@ const Settings = () => {
             <div className="flex items-center gap-6">
               <div className="relative group">
                 <img 
-                  src={profileImg} 
+                  src={data?.data?.avatar} 
                   alt="Profile" 
                   className="w-24 h-24 rounded-3xl object-cover border-4 border-indigo-50" 
                 />
@@ -67,8 +70,8 @@ const Settings = () => {
 
             {/* Form Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputGroup label="Full Name" placeholder="Alex Rivera" icon={User} />
-              <InputGroup label="Email Address" placeholder="alex@devblog.com" icon={Mail} />
+              <InputGroup label="Full Name" placeholder={data?.data?.fullName} icon={User} />
+              <InputGroup label="Email Address" placeholder={data?.data?.email} icon={Mail} />
               <div className="md:col-span-2">
                 <label className="block text-sm font-bold text-gray-700 mb-2">Short Bio</label>
                 <textarea 
@@ -77,8 +80,8 @@ const Settings = () => {
                   className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
                 />
               </div>
-              <InputGroup label="Location" placeholder="San Francisco, CA" icon={Globe} />
-              <InputGroup label="Website" placeholder="https://alexrivera.dev" icon={Globe} />
+              <InputGroup label="Phone Number" placeholder="01770-123456" icon={Phone} />
+              <InputGroup label="Location" placeholder="San Francisco, CA" icon={Home} />
             </div>
           </div>
         )}

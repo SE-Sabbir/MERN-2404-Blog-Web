@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {  LogOut,Zap, MoreVertical,Edit,Trash2,} from 'lucide-react'
-import { useDeleteBlogMutation, useGetListByUserQuery } from '../../service/api'
+import { useDeleteBlogMutation, useGetListByUserQuery,  } from '../../service/api'
 import DeleteModal from './DeleteModal';
 import toast from 'react-hot-toast';
 

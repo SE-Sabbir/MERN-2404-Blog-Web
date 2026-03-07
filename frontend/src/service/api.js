@@ -38,7 +38,7 @@ export const api = createApi({
                 method: "POST",
             })
         }),
-        getUser:builder.query({
+        getUserProfile:builder.query({
             query:()=> "auth/profile",
         }),
         createBlog:builder.mutation({
@@ -70,4 +70,4 @@ export const api = createApi({
     })
 })
 
-export const {useGetBlogListQuery , useLoginMutation , useRegisterUserMutation , useVerifyOtpMutation, useGetUserQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation , useDeleteBlogMutation} = api;
+export const {useGetBlogListQuery , useLoginMutation , useRegisterUserMutation , useVerifyOtpMutation, useGetUserProfileQuery , useGetListByUserQuery , useCreateBlogMutation , useGetSlugBlogQuery , useLogoutMutation , useDeleteBlogMutation} = api;

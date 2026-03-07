@@ -7,16 +7,22 @@ import { useVerifyOtpMutation } from '../service/api';
 const VerifyOtp = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const email = location.state?.email || "your email"; // Get email from navigation state
-  
+  const email = location.state?.email; // Get email from navigation state
+
   const [otp, setOtp] = useState(['', '', '', '',]);
   const inputRefs = useRef([]);
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
 
-  // Focus first input on mount
+  // Redirect if no email, otherwise focus first input on mount
   useEffect(() => {
-    if (inputRefs.current[0]) inputRefs.current[0].focus();
-  }, []);
+    if (!email) {
+      navigate('/register', { replace: true });
+    } else if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, [email, navigate]);
+
+  if (!email) return null; // Avoid rendering the component if redirecting
 
   const handleChange = (index, value) => {
     if (!/^\d*$/.test(value)) return; // Only numbers
@@ -59,7 +65,7 @@ const VerifyOtp = () => {
             <ShieldCheck size={32} />
           </div>
           <h2 className="text-2xl font-bold text-gray-900">Verify your email</h2>
-          <p className="text-gray-500 mt-2">We've sent a 4-digit code to <br/> <span className="text-gray-900 font-medium">{email}</span></p>
+          <p className="text-gray-500 mt-2">We've sent a 4-digit code to <br /> <span className="text-gray-900 font-medium">{email}</span></p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-8">
@@ -90,7 +96,7 @@ const VerifyOtp = () => {
           <button className="text-sm font-bold text-indigo-600 flex items-center justify-center gap-2 mx-auto hover:underline">
             <RefreshCw size={16} /> Resend Code
           </button>
-          <button 
+          <button
             onClick={() => navigate('/register')}
             className="text-sm font-medium text-gray-400 flex items-center justify-center gap-2 mx-auto hover:text-gray-600"
           >

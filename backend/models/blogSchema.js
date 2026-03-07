@@ -1,13 +1,14 @@
 const mongoose = require('mongoose')
 const userSchema = require('./userSchema')
 const blogSchema = new mongoose.Schema({
-    thumbnail:{type:String , required:true},
-    title:{type:String , required:true},
-    content:{type:String, required:true},
-    slug:{type:String, required:true},
-    tags:{type:String, required:true},
-    author:{type:mongoose.Schema.Types.ObjectId , ref:"user",required:true},
-    status:{type:String , enum:['active','inactive'] , default:'inactive'}
-},{timestamps:true})
+    thumbnail: { type: String, required: true },
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    slug: { type: String, required: true },
+    tags: { type: String, required: true },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
+    status: { type: String, enum: ['active', 'inactive'], default: 'inactive' },
+    views: { type: Number, default: 0 }
+}, { timestamps: true })
 
 module.exports = mongoose.model("post", blogSchema)
