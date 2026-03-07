@@ -135,7 +135,7 @@ const resetPassword =async(req , res)=>{
 // ------------------Get User Profile Controller----------------------
 const getUserProfile = async(req , res)=>{
     try{
-        const user = await userSchema.findById(req.user._id).select("fullName email role avatar")
+        const user = await userSchema.findById(req.user._id).select("fullName email role avatar phone location bio")
         responseHandler.success(res , "User Profile fetched successfully" , user)
     }
     catch(err){
@@ -146,7 +146,7 @@ const getUserProfile = async(req , res)=>{
 const updateProfile = async(req , res)=>{
     try{
         const {_id , fullName , bio , phone , location} = req.body
-        const existingUser = await userSchema.findById(_id).select("fullName email role avatar")
+        const existingUser = await userSchema.findById(_id).select("fullName email role avatar phone location bio")
         if(fullName) existingUser.fullName = fullName
         if(bio) existingUser.bio = bio
         if(phone) existingUser.phone = phone
