@@ -5,42 +5,52 @@ import toast from 'react-hot-toast';
 
 const Settings = () => {
 
-    const {data , isLoading , error} = useGetUserProfileQuery();
-    console.log(data);
-    const [updateProfile] = useUpdateProfileMutation();
-    const [profileImg, setProfileImg] = useState(data?.data?.avatar);
-    const [activeTab, setActiveTab] = useState('profile');
+  const { data, isLoading, error } = useGetUserProfileQuery();
+  console.log(data);
+  const [updateProfile] = useUpdateProfileMutation();
+  const [profileImg, setProfileImg] = useState(data?.data?.avatar);
+  const [activeTab, setActiveTab] = useState('profile');
 
-    const [formData, setFormData] = useState({
-        fullName: data?.data?.fullName,
-        email: data?.data?.email,
-        bio: data?.data?.bio,
-        phone: data?.data?.phone,
-        location: data?.data?.location,
-    });
+  const [formData, setFormData] = useState({
+    _id: data?.data?._id || "",
+    fullName: data?.data?.fullName || "",
+    email: data?.data?.email || "",
+    bio: data?.data?.bio || "",
+    phone: data?.data?.phone || "",
+    location: data?.data?.location || "",
+  });
 
-    const handleImageChange = (e) => {
-      console.log(e.target.files[0]);
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    const handleUpdateProfile = async (e) => {
-      e.preventDefault();
-      try {
-        const res = await updateProfile(formData).unwrap();
-        if(res.success){
-          toast.success("Profile Updated Successfully");
-        }
-      } catch (error) {
-        toast.error(error?.data?.message || "Failed to Update Profile");
-        console.log(error);
+  const handleImageChange = (e) => {
+    console.log(e.target.files[0]);
+  };
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      const res = await updateProfile(formData).unwrap();
+      if (res.success) {
+        toast.success("Profile Updated Successfully");
       }
-    };
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to Update Profile");
+      console.log(error);
+    }
+  };
 
-    const tabs = [
-        { id: 'profile', label: 'Public Profile', icon: User },
-        { id: 'security', label: 'Security', icon: Lock },
-        { id: 'notifications', label: 'Notifications', icon: Bell },
-    ];
+  const tabs = [
+    { id: 'profile', label: 'Public Profile', icon: User },
+    { id: 'security', label: 'Security', icon: Lock },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+  ];
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in duration-500">
       {/* Tab Navigation */}
@@ -49,11 +59,10 @@ const Settings = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              activeTab === tab.id 
-              ? 'bg-white text-indigo-600 shadow-sm' 
+            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === tab.id
+              ? 'bg-white text-indigo-600 shadow-sm'
               : 'text-gray-500 hover:text-gray-700'
-            }`}
+              }`}
           >
             <tab.icon size={18} />
             {tab.label}
@@ -73,10 +82,10 @@ const Settings = () => {
             {/* Photo Upload */}
             <div className="flex items-center gap-6">
               <div className="relative group">
-                <img 
-                  src={profileImg} 
-                  alt="Profile" 
-                  className="w-24 h-24 rounded-3xl object-cover border-4 border-indigo-50" 
+                <img
+                  src={profileImg}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-3xl object-cover border-4 border-indigo-50"
                 />
                 <label className="absolute inset-0 flex items-center justify-center bg-black/40 text-white rounded-3xl opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
                   <Camera size={20} />
@@ -84,25 +93,28 @@ const Settings = () => {
                 </label>
               </div>
               <div>
-                <button  className="text-sm font-bold text-indigo-600 hover:underline">Change Avatar</button>
+                <button className="text-sm font-bold text-indigo-600 hover:underline">Change Avatar</button>
                 <p className="text-xs text-gray-400 mt-1">JPG, GIF or PNG. Max size 2MB.</p>
               </div>
             </div>
 
             {/* Form Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <InputGroup label="Full Name" placeholder={data?.data?.fullName} icon={User} />
-              <InputGroup label="Email Address" placeholder={data?.data?.email} icon={Mail} />
+              <InputGroup label="Full Name" name="fullName" value={setFormData.fullName} onChange={handleInputChange} placeholder={data?.data?.fullName} icon={User} />
+              <InputGroup label="Email Address" name="email" value={setFormData.email} onChange={handleInputChange} placeholder={data?.data?.email} icon={Mail} />
               <div className="md:col-span-2">
                 <label className="block text-sm font-bold text-gray-700 mb-2">Short Bio</label>
-                <textarea 
-                  rows="4" 
-                  placeholder="Tell the world about yourself..." 
+                <textarea
+                  rows="4"
+                  name="bio"
+                  value={setFormData.bio}
+                  onChange={handleInputChange}
+                  placeholder="Tell the world about yourself..."
                   className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none"
                 />
               </div>
-              <InputGroup label="Phone Number" placeholder="01770-123456" icon={Phone} />
-              <InputGroup label="Location" placeholder="San Francisco, CA" icon={Home} />
+              <InputGroup label="Phone Number" name="phone" value={setFormData.phone} onChange={handleInputChange} placeholder={data?.data?.phone} icon={Phone} />
+              <InputGroup label="Location" name="location" value={setFormData.location} onChange={handleInputChange} placeholder={data?.data?.location} icon={Home} />
             </div>
           </div>
         )}
@@ -165,9 +177,9 @@ const InputGroup = ({ label, icon: Icon, ...props }) => (
       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
         <Icon size={18} />
       </div>
-      <input 
-        className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+      <input
         {...props}
+        className="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
       />
     </div>
   </div>

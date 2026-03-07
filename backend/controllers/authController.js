@@ -145,10 +145,12 @@ const getUserProfile = async(req , res)=>{
 // ------------------Update User Profile Controller----------------------
 const updateProfile = async(req , res)=>{
     try{
-        const {fullName} = req.body
-        const existingUser = await userSchema.findById(req.user._id).select("fullName email role avatar")
+        const {_id , fullName , bio , phone , location} = req.body
+        const existingUser = await userSchema.findById(_id).select("fullName email role avatar")
         if(fullName) existingUser.fullName = fullName
-
+        if(bio) existingUser.bio = bio
+        if(phone) existingUser.phone = phone
+        if(location) existingUser.location = location
         if(req.file) {
             deleteFromCloudinary(existingUser.avatar)
             const uploadImage = await uploadToCloudinary(req.file.buffer)
