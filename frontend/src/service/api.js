@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const api = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_API_URL, credentials: "include" }),
-    tagTypes: ['Posts'],
+    tagTypes: ['Posts' , 'Profile'],
     endpoints: (builder) => ({
         login: builder.mutation({
             query: (data) => ({
@@ -40,13 +40,15 @@ export const api = createApi({
         }),
         getUserProfile: builder.query({
             query: () => "auth/profile",
+            providesTags: ['Profile']
         }),
         updateProfile: builder.mutation({
             query: (data) => ({
                 url: "auth/profile",
                 method: "PUT",
                 body: data
-            })
+            }),
+            invalidatesTags: ['Profile']
         }),
         createBlog: builder.mutation({
             query: (data) => ({
