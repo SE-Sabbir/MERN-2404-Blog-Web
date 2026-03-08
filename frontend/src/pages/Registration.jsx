@@ -9,7 +9,6 @@ import toast from 'react-hot-toast';
 const Registration = () => {
 
   const [register,{data, error, isLoading}] = useRegisterUserMutation();
-  console.log("This is from data",data)
   const navigate = useNavigate()
   const [formData , setFormData] = useState({
     fullName:"",
@@ -24,7 +23,6 @@ const Registration = () => {
   }
   const handleSubmit = async (e)=>{
     e.preventDefault();
-    console.log(formData)
     try {
       const res = await register(formData).unwrap();
       if(res.success){

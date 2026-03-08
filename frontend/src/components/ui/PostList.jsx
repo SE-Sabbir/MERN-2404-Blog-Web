@@ -15,7 +15,6 @@ const PostList = () => {
 
   // Open modal and store post data
   const openDeleteModal = (post) => {
-    console.log("this is open modal" , post)
     setSelectedPost(post);
     setIsModalOpen(true);
   };

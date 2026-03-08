@@ -41,8 +41,7 @@ const Settings = () => {
     if (avatar) {
       form.append("avatar", avatar);
     }
-
-    console.log(form);
+    
     try {
       const res = await updateProfile(form).unwrap();
       if (res.success) {

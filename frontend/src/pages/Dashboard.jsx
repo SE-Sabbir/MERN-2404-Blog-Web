@@ -11,9 +11,8 @@ import { useGetUserProfileQuery } from '../service/api';
 const Dashboard = () => {
 
   const {data , isLoading , error} = useGetUserProfileQuery();
-  console.log(data);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('settings');
+  const [activeTab, setActiveTab] = useState('overview');
 
   return (
     <div className="flex min-h-screen bg-gray-50">
