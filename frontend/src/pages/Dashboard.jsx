@@ -13,7 +13,7 @@ const Dashboard = () => {
   const {data , isLoading , error} = useGetUserProfileQuery();
   console.log(data);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState('settings');
 
   return (
     <div className="flex min-h-screen bg-gray-50">
